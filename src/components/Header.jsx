@@ -59,7 +59,6 @@ const Header = ({ toggleSidebar, isMobileOpen }) => {
     }, [usuario, setCajaAbierta]);
 
     const handleAbrirCaja = async () => {
-        if (!window.confirm("¿Deseas abrir la caja para iniciar tu turno?")) return;
         
         setAbriendo(true);
         try {
@@ -71,7 +70,16 @@ const Header = ({ toggleSidebar, isMobileOpen }) => {
             });
             
             setCajaAbierta(true);
-            Swal.fire({ title: '¡Turno Iniciado!', text: 'Caja Abierta Correctamente.', icon: 'success', timer: 2000, showConfirmButton: false });
+            
+            // 2. Mostramos el mensaje de éxito que desaparece solo en 2 segundos
+            Swal.fire({ 
+                title: '¡Turno Iniciado!', 
+                text: 'Caja Abierta Correctamente.', 
+                icon: 'success', 
+                timer: 2000, 
+                showConfirmButton: false 
+            });
+            
         } catch (error) {
             const msg = error.response?.data?.mensaje || error.response?.data?.error || "Error al abrir caja";
             Swal.fire('Error', msg, 'error');

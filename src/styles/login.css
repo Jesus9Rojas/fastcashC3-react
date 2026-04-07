@@ -11,6 +11,19 @@
     --font-main: "Merriweather Sans", sans-serif !important;
 }
 
+html {
+    background-color: var(--color-fondo-dark); /* Evita destellos blancos */
+}
+
+#root {
+    width: 100%;
+    height: 100vh;
+    margin: 0 !important;
+    padding: 0 !important;
+    max-width: none !important; /* Destruye el límite de 1280px de Vite */
+    display: flex;
+}
+
 * { 
     margin: 0; 
     padding: 0; 
@@ -21,10 +34,9 @@ body {
     font-family: var(--font-main);
     background-color: var(--color-fondo-dark);
     height: 100vh;
-    width: 100vw;
+    width: 100%;
     display: flex;
-    overflow: hidden; /* Evita cualquier barra de desplazamiento */
-    /* Quitamos el padding para que ocupe el 100% */
+    overflow: hidden; 
 }
 
 /* --- CONTENEDOR PRINCIPAL (100% Pantalla) --- */
@@ -50,7 +62,6 @@ body {
     justify-content: center;
     padding: 5rem;
     color: white;
-    min-width: 890px;
 }
 
 /* Capa oscura translúcida encima de la foto (Filtro Rojo/Negro) */
@@ -143,7 +154,7 @@ body {
 .form-wrapper {
     width: 100%;
     max-width: 440px; 
-    margin: 0 auto 0 2rem; /* OBLIGA al contenedor a centrarse en el espacio sobrante */
+    margin: 0 auto; /* OBLIGA al contenedor a centrarse en el espacio sobrante */
     position: relative;
     z-index: 2;
     background: var(--color-glass);
