@@ -6,27 +6,25 @@ import Swal from 'sweetalert2';
 const Configuracion = () => {
     const { usuario } = useContext(AuthContext);
     
-    // Estados principales
-    const [tabActiva, setTabActiva] = useState('categorias'); // 'categorias' o 'entidades'
+    const [tabActiva, setTabActiva] = useState('categorias'); 
     const [datos, setDatos] = useState([]);
     const [cargando, setCargando] = useState(false);
 
-    // Estados para el Modal
     const [modalVisible, setModalVisible] = useState(false);
     const [modoEdicion, setModoEdicion] = useState(false);
     const [animacionModal, setAnimacionModal] = useState(''); 
     
-    // Estado del Formulario
     const [formId, setFormId] = useState('');
     const [formNombre, setFormNombre] = useState('');
     const [formActivo, setFormActivo] = useState('true');
-    // Específico de Entidad
     const [formTipo, setFormTipo] = useState('BANCO');
+    
+    // 👇 Variables en memoria para no perder el icono ni el color al editar
+    const [formIcono, setFormIcono] = useState('📦');
+    const [formColor, setFormColor] = useState('#E60023');
 
-    // Verificar si es Admin
     const esAdmin = String(usuario?.rol || '').toUpperCase() === 'ADMINISTRADOR';
 
-    // 1. Cargar Datos
     const cargarDatos = async () => {
         setCargando(true);
         try {
@@ -46,35 +44,40 @@ const Configuracion = () => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [tabActiva, esAdmin]);
 
-    // 2. Abrir Modal para NUEVO
     const abrirModalNuevo = () => {
         setModoEdicion(false);
         setFormId('');
         setFormNombre('');
         setFormActivo('true');
         setFormTipo('BANCO');
+        setFormIcono('📦');
+        setFormColor('#E60023');
         setAnimacionModal('mostrar');
         setModalVisible(true);
     };
 
-    // 3. Abrir Modal para EDITAR
     const abrirModalEditar = (item) => {
         setModoEdicion(true);
         if (tabActiva === 'categorias') {
             setFormId(item.categoriaID || item.CategoriaID);
             setFormNombre(item.nombre || item.Nombre);
-            setFormActivo(String(item.activo ?? item.Activo ?? true));
+            const activo = item.activo === true || item.Activo === true || String(item.activo) === 'true';
+            setFormActivo(activo ? 'true' : 'false');
+            
+            // 👇 Capturamos el icono que tiene actualmente
+            setFormIcono(item.icono || item.Icono || '📦');
+            setFormColor(item.colorHex || item.ColorHex || '#E60023');
         } else {
             setFormId(item.entidadID || item.EntidadID);
             setFormNombre(item.nombre || item.Nombre);
             setFormTipo(item.tipo || item.Tipo || 'BANCO');
-            setFormActivo(String(item.activo ?? item.Activo ?? true));
+            const activo = item.activo === true || item.Activo === true || String(item.activo) === 'true';
+            setFormActivo(activo ? 'true' : 'false');
         }
         setAnimacionModal('mostrar');
         setModalVisible(true);
     };
 
-    // Cerrar Modal con Animación
     const cerrarModal = () => {
         setAnimacionModal('saliendo');
         setTimeout(() => {
@@ -83,7 +86,6 @@ const Configuracion = () => {
         }, 300);
     };
 
-    // 4. Guardar (Crear o Actualizar)
     const handleGuardar = async (e) => {
         e.preventDefault();
         
@@ -95,8 +97,9 @@ const Configuracion = () => {
         if (tabActiva === 'entidades') {
             payload.tipo = formTipo;
         } else {
-            payload.colorHex = '#E60023';
-            payload.icono = '📦';
+            // 👇 Enviamos los datos originales que capturamos, no cajitas por defecto
+            payload.colorHex = formColor;
+            payload.icono = formIcono;
         }
 
         try {
@@ -135,7 +138,6 @@ const Configuracion = () => {
             <section className="vista-seccion activa">
                 <div className="contenedor-tabla-registro">
                     
-                    {/* --- CABECERA --- */}
                     <div className="cabecera-tabla">
                         <div className="titulo-seccion">
                             <h2><i className="fa-solid fa-gear"></i> Configuración del Sistema</h2>
@@ -145,28 +147,18 @@ const Configuracion = () => {
 
                     <div className="admin-container">
                         
-                        {/* --- TABS --- */}
                         <div className="admin-tabs" style={{ marginBottom: '20px' }}>
-                            <button 
-                                className={`btn-tab ${tabActiva === 'categorias' ? 'activo' : ''}`} 
-                                onClick={() => setTabActiva('categorias')}
-                            >
+                            <button className={`btn-tab ${tabActiva === 'categorias' ? 'activo' : ''}`} onClick={() => setTabActiva('categorias')}>
                                 <i className="fa-solid fa-box"></i> Categorías
                             </button>
-                            <button 
-                                className={`btn-tab ${tabActiva === 'entidades' ? 'activo' : ''}`} 
-                                onClick={() => setTabActiva('entidades')}
-                            >
+                            <button className={`btn-tab ${tabActiva === 'entidades' ? 'activo' : ''}`} onClick={() => setTabActiva('entidades')}>
                                 <i className="fa-solid fa-building-columns"></i> Bancos y Billeteras
                             </button>
                         </div>
                         <hr style={{ border: 0, borderTop: '1px solid var(--color-border)', marginBottom: '20px' }} />
 
-                        {/* --- ÁREA DE TRABAJO (TABLA) --- */}
                         <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: '1rem' }}>
-                            <button className="btn-nuevo-usuario" onClick={abrirModalNuevo}>
-                                + Nuevo Registro
-                            </button>
+                            <button className="btn-nuevo-usuario" onClick={abrirModalNuevo}>+ Nuevo Registro</button>
                         </div>
 
                         <div className="tabla-responsive">
@@ -189,27 +181,20 @@ const Configuracion = () => {
                                         datos.map(item => {
                                             const id = tabActiva === 'categorias' ? (item.categoriaID || item.CategoriaID) : (item.entidadID || item.EntidadID);
                                             const nombre = item.nombre || item.Nombre;
-                                            const activo = item.activo ?? item.Activo ?? true;
+                                            const activo = item.activo === true || item.Activo === true || String(item.activo) === 'true';
                                             
                                             return (
                                                 <tr key={id}>
                                                     <td>{id}</td>
                                                     <td style={{ fontWeight: 'bold' }}>{nombre}</td>
-                                                    
                                                     {tabActiva === 'entidades' && <td>{item.tipo || item.Tipo}</td>}
-                                                    
                                                     <td>
                                                         <span className={`badge-estado ${activo ? 'completado' : 'anulado'}`}>
                                                             {activo ? 'ACTIVO' : 'INACTIVO'}
                                                         </span>
                                                     </td>
-                                                    
                                                     <td>
-                                                        <button 
-                                                            className="btn-nuevo-usuario" 
-                                                            onClick={() => abrirModalEditar(item)} 
-                                                            style={{ padding: '6px 12px', fontSize: '0.85rem' }}
-                                                        >
+                                                        <button className="btn-nuevo-usuario" onClick={() => abrirModalEditar(item)} style={{ padding: '6px 12px', fontSize: '0.85rem' }}>
                                                             <i className="fa-solid fa-pen-to-square"></i> Editar
                                                         </button>
                                                     </td>
@@ -225,19 +210,8 @@ const Configuracion = () => {
                 </div>
             </section>
 
-            {/* --- MODAL (FIJO Y CENTRADO, A PANTALLA COMPLETA) --- */}
             {modalVisible && (
-                <div 
-                    className={`modal ${animacionModal}`} 
-                    style={{ 
-                        display: 'flex', 
-                        position: 'fixed', 
-                        top: 0, left: 0, width: '100vw', height: '100vh', 
-                        zIndex: 99999, 
-                        backgroundColor: 'rgba(0,0,0,0.5)',
-                        justifyContent: 'center', alignItems: 'center'
-                    }}
-                >
+                <div className={`modal ${animacionModal}`} style={{ display: 'flex', position: 'fixed', top: 0, left: 0, width: '100vw', height: '100vh', zIndex: 99999, backgroundColor: 'rgba(0,0,0,0.5)', justifyContent: 'center', alignItems: 'center' }}>
                     <div className="modal-contenido-bonito" style={{ margin: 'auto', position: 'relative', maxHeight: '90vh', overflowY: 'auto' }}>
                         <div className="modal-header">
                             <h2>{modoEdicion ? 'Editar Registro' : 'Nuevo Registro'}</h2>
@@ -245,29 +219,15 @@ const Configuracion = () => {
                         </div>
 
                         <form onSubmit={handleGuardar}>
-                            
                             <div className="form-group">
                                 <label>Nombre:</label>
-                                <input 
-                                    type="text" 
-                                    className="input-moderno" 
-                                    value={formNombre}
-                                    onChange={(e) => setFormNombre(e.target.value)}
-                                    required 
-                                    style={{ width: '100%', padding: '10px' }} 
-                                />
+                                <input type="text" className="input-moderno" value={formNombre} onChange={(e) => setFormNombre(e.target.value)} required style={{ width: '100%', padding: '10px' }} />
                             </div>
 
-                            {/* Campo solo para Entidades */}
                             {tabActiva === 'entidades' && (
                                 <div className="form-group">
                                     <label>Tipo:</label>
-                                    <select 
-                                        className="input-select-modal" 
-                                        value={formTipo}
-                                        onChange={(e) => setFormTipo(e.target.value)}
-                                        style={{ width: '100%' }}
-                                    >
+                                    <select className="input-select-modal" value={formTipo} onChange={(e) => setFormTipo(e.target.value)} style={{ width: '100%' }}>
                                         <option value="BANCO">Banco</option>
                                         <option value="BILLETERA">Billetera Digital</option>
                                         <option value="OTRO">Otro</option>
@@ -277,12 +237,7 @@ const Configuracion = () => {
 
                             <div className="form-group">
                                 <label>Estado:</label>
-                                <select 
-                                    className="input-select-modal" 
-                                    value={formActivo}
-                                    onChange={(e) => setFormActivo(e.target.value)}
-                                    style={{ width: '100%' }}
-                                >
+                                <select className="input-select-modal" value={formActivo} onChange={(e) => setFormActivo(e.target.value)} style={{ width: '100%' }}>
                                     <option value="true">Activo</option>
                                     <option value="false">Inactivo</option>
                                 </select>
