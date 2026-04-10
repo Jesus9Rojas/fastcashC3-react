@@ -1,21 +1,13 @@
 import axios from 'axios';
 
-// 1. DETECCIÓN INTELIGENTE (Tu misma lógica)
-const esLocal = window.location.hostname === 'localhost' || 
-                window.location.hostname === '127.0.0.1' || 
-                window.location.hostname === '127.0.0.2' || 
-                window.location.protocol === 'file:';
+// La URL vendrá de las variables de entorno. 
+// (Nota: Si usas Vite, cambia process.env.REACT_APP_API_URL por import.meta.env.VITE_API_URL)
+const BASE_URL = import.meta.env.VITE_API_URL;
 
-const BASE_URL = esLocal 
-    ? 'http://localhost:8080/api' 
-    : 'https://fastcash-backendc3-production.up.railway.app/api';
-
-// 2. CONFIGURACIÓN DE AXIOS
 const api = axios.create({
     baseURL: BASE_URL
 });
 
-// Interceptor para agregar el token a TODAS las peticiones automáticamente
 api.interceptors.request.use((config) => {
     const sesionStr = localStorage.getItem('usuarioSesion');
     if (sesionStr) {
