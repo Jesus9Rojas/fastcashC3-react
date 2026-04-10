@@ -8,6 +8,7 @@ import html2pdf from 'html2pdf.js';
 import logoTicket from '../assets/img/img/LogoMas1.png';
 import yapeIcon from '../assets/img/icon/codigo-qr-icon.png'
 import tarjetaIcon from '../assets/img/icon/tarjeta-icon.png';  
+import transfIcon from '../assets/img/icon/transferencia-movil.png'
 
 const CierreCaja = () => {
     const { usuario, logout, cajaAbierta, setCajaAbierta } = useContext(AuthContext);
@@ -179,31 +180,31 @@ const CierreCaja = () => {
 
                 {/* --- TARJETAS DASHBOARD --- */}
                 <div className="grid-stats">
-                    <div className="stat-card digital">
+                    <div className="stat-card digital" style={{ borderLeft: '4px solid rgb(230, 0, 35)' }}>
                         <div className="stat-icon"><img src={yapeIcon} alt="Yape" /></div>
                         <div className="stat-info">
                             <span className="stat-label">Billeteras Digitales</span>
-                            <h3 className="stat-value">S/ {resumen.yape.toFixed(2)}</h3>
+                            <h3 className="stat-value">S/ <ContadorAnimado valorFinal={resumen.yape} /></h3>
                         </div>
                         <div className="stat-trend">Yape / Plin</div>
                     </div>
 
-                    <div className="stat-card card">
+                    <div className="stat-card card" style={{ borderLeft: '4px solid #3b82f6' }}>
                        <div className="stat-icon"><img src={tarjetaIcon} alt="Tarjeta" /></div>
                         <div className="stat-info">
                             <span className="stat-label">Cobros con Tarjeta</span>
-                            <h3 className="stat-value">S/ {resumen.tarjeta.toFixed(2)}</h3>
+                            <h3 className="stat-value">S/ <ContadorAnimado valorFinal={resumen.tarjeta} /></h3>
                         </div>
                         <div className="stat-trend">Visa / Master</div>
                     </div>
 
-                    <div className="stat-card danger">
-                        <div className="stat-icon"><i className="fa-solid fa-ban"></i></div>
+                    <div className="stat-card transf" style={{ borderLeft: '4px solid rgb(5, 150, 105)' }}>
+                        <div className="stat-icon"><img src={transfIcon} alt="Transferencia" /></div>
                         <div className="stat-info">
-                            <span className="stat-label">Operaciones Anuladas</span>
-                            <h3 className="stat-value">S/ {resumen.anulado.toFixed(2)}</h3>
+                            <span className="stat-label">Transferencias</span>
+                            <h3 className="stat-value">S/ <ContadorAnimado valorFinal={resumen.transferencia} /></h3>
                         </div>
-                        <div className="stat-trend">Anulaciones</div>
+                        <div className="stat-trend">Bancos Directos</div>
                     </div>
 
                     <div className="stat-card total-highlight">

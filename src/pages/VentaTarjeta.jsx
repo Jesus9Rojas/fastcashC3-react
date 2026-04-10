@@ -41,12 +41,15 @@ const VentaTarjeta = () => {
         const cargarDatosMaestros = async () => {
             try {
                 // 1. Cargar Familias (Categorías)
-                const resCat = await api.get('/maestros/categorias');
-                const categorias = resCat.data;
-                setFamilias(categorias);
+                const resFamilias = await api.get('/maestros/categorias');
+                const familiasActivas = resFamilias.data.filter(f => 
+                    f.activo === true || f.Activo === true || String(f.activo) === 'true'
+                );
+                
+                setFamilias(familiasActivas);
 
-                if (categorias.length > 0) {
-                    const catComestibles = categorias.find(c => {
+                if (familiasActivas.length > 0) {
+                    const catComestibles = familiasActivas.find(c => {
                         const nombreCat = String(c.nombre || c.Nombre || '').toUpperCase();
                         return nombreCat.includes('COMESTIBLE');
                     });
@@ -54,7 +57,7 @@ const VentaTarjeta = () => {
                     if (catComestibles) {
                         setFamiliaSeleccionada(catComestibles.categoriaID || catComestibles.CategoriaID);
                     } else {
-                        setFamiliaSeleccionada(categorias[0].categoriaID || categorias[0].CategoriaID);
+                        setFamiliaSeleccionada(familiasActivas[0].categoriaID || familiasActivas[0].CategoriaID);
                     }
                 }
 
@@ -107,7 +110,7 @@ const VentaTarjeta = () => {
             clienteNombre: "PUBLICO GENERAL",
             detalles: [{ CategoriaID: parseInt(familiaSeleccionada), Monto: parseFloat(monto) }],
             pagos: [{
-                FormaPago: "QR", 
+                FormaPago: "TARJETA", 
                 EntidadID: parseInt(bancoSeleccionado),
                 NumOperacion: numOperacion,
                 Monto: parseFloat(monto)

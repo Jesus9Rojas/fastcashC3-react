@@ -41,13 +41,15 @@ const VentaYape = () => {
         const cargarDatosMaestros = async () => {
             try {
                 // 1. Cargar Familias (Categorías)
-                const resCat = await api.get('/maestros/categorias');
-                const categorias = resCat.data;
-                setFamilias(categorias);
-
+                const resFamilias = await api.get('/maestros/categorias');
+                const familiasActivas = resFamilias.data.filter(f => 
+                    f.activo === true || f.Activo === true || String(f.activo) === 'true'
+                );
+                
+                setFamilias(familiasActivas);
                 // Lógica original: Buscar "Comestibles" por defecto, sino la primera
-                if (categorias.length > 0) {
-                    const catComestibles = categorias.find(c => {
+                if (familiasActivas.length > 0) {
+                    const catComestibles = familiasActivas.find(c => {
                         const nombreCat = (c.nombre || c.Nombre || '').toUpperCase();
                         return nombreCat.includes('COMESTIBLE');
                     });
@@ -55,7 +57,7 @@ const VentaYape = () => {
                     if (catComestibles) {
                         setFamiliaSeleccionada(catComestibles.categoriaID || catComestibles.CategoriaID);
                     } else {
-                        setFamiliaSeleccionada(categorias[0].categoriaID || categorias[0].CategoriaID);
+                        setFamiliaSeleccionada(familiasActivas[0].categoriaID || familiasActivas[0].CategoriaID);
                     }
                 }
 
