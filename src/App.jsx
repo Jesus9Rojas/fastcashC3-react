@@ -1,5 +1,5 @@
 import { useContext } from 'react';
-import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import { HashRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { AuthContext } from './context/AuthContext';
 
 import Login from './pages/Login';
@@ -26,7 +26,7 @@ function App() {
   const { usuario } = useContext(AuthContext);
 
   return (
-    <BrowserRouter>
+    <HashRouter>
       <Routes>
         
         <Route path="/login" element={!usuario ? <Login /> : <Navigate to="/" />} />
@@ -49,7 +49,7 @@ function App() {
         <Route path="*" element={<Navigate to="/" />} />
 
       </Routes>
-    </BrowserRouter>
+    </HashRouter>
   );
 }
 
