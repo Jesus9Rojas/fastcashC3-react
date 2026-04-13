@@ -61,8 +61,8 @@ const Reportes = () => {
 
             let totalGeneral = 0;
             data.forEach(row => {
-               const monto = row["Monto Total"] || row["TotalVendido"] || row["ImporteTotal"] || row["Monto"] || row["Saldo Final"] || row["SaldoFinal"] || row["Total"] || row["SaldoEsperadoEnCaja"] || 0;
-                totalGeneral += parseFloat(monto);
+               const monto = row["Monto Total"] || row["TotalVendido"] || row["totalvendido"] || row["ImporteTotal"] || row["importetotal"] || row["Monto"] || row["monto"] || row["Saldo Final"] || row["saldofinal"] || row["SaldoFinal"] || row["Total"] || row["total"] || 0;
+               totalGeneral += parseFloat(monto);
             });
 
             const wb = XLSX.utils.book_new();
@@ -247,7 +247,7 @@ const Reportes = () => {
                 });
                 tbody.appendChild(tr);
 
-                const monto = row["Monto Total"] || row["TotalVendido"] || row["ImporteTotal"] || row["Monto"] || row["Saldo Final"] || row["SaldoFinal"] || row["Total"] || row["SaldoEsperadoEnCaja"] || 0;
+                const monto = row["Monto Total"] || row["TotalVendido"] || row["totalvendido"] || row["ImporteTotal"] || row["importetotal"] || row["Monto"] || row["monto"] || row["Saldo Final"] || row["saldofinal"] || row["SaldoFinal"] || row["Total"] || row["total"] || 0;
                 sumaFinal += parseFloat(monto);
             });
             
