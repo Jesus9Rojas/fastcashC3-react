@@ -61,7 +61,7 @@ const Reportes = () => {
 
             let totalGeneral = 0;
             data.forEach(row => {
-                const monto = row["Monto Total"] || row["TotalVendido"] || row["ImporteTotal"] || row["Monto"] || 0;
+               const monto = row["Monto Total"] || row["TotalVendido"] || row["ImporteTotal"] || row["Monto"] || row["Saldo Final"] || row["SaldoFinal"] || row["Total"] || row["SaldoEsperadoEnCaja"] || 0;
                 totalGeneral += parseFloat(monto);
             });
 
@@ -112,7 +112,7 @@ const Reportes = () => {
                         const valor = ws[cellAddress].v;
                         const headerName = (headers[C] || "").toUpperCase();
                         
-                        if (headerName.includes("MONTO") || headerName.includes("TOTAL") || headerName.includes("VENDIDO") || headerName.includes("ANULADO")) {
+                       if (headerName.includes("MONTO") || headerName.includes("TOTAL") || headerName.includes("VENDIDO") || headerName.includes("ANULADO") || headerName.includes("SALDO")) {
                             ws[cellAddress].t = 'n';
                             ws[cellAddress].v = parseFloat(valor) || 0;
                             ws[cellAddress].s = sMoneda;
@@ -236,7 +236,7 @@ const Reportes = () => {
                     let valor = row[h];
                     const headerName = h.toUpperCase();
                     
-                    if (headerName.includes("MONTO") || headerName.includes("TOTAL") || headerName.includes("VENDIDO") || headerName.includes("ANULADO")) {
+                    if (headerName.includes("MONTO") || headerName.includes("TOTAL") || headerName.includes("VENDIDO") || headerName.includes("ANULADO") || headerName.includes("SALDO")) {
                         td.innerText = `S/ ${parseFloat(valor || 0).toFixed(2)}`;
                         td.style.textAlign = 'right';
                     } else {
@@ -247,7 +247,7 @@ const Reportes = () => {
                 });
                 tbody.appendChild(tr);
 
-                const monto = row["Monto Total"] || row["TotalVendido"] || row["ImporteTotal"] || row["Monto"] || 0;
+                const monto = row["Monto Total"] || row["TotalVendido"] || row["ImporteTotal"] || row["Monto"] || row["Saldo Final"] || row["SaldoFinal"] || row["Total"] || row["SaldoEsperadoEnCaja"] || 0;
                 sumaFinal += parseFloat(monto);
             });
             
