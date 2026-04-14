@@ -46,7 +46,6 @@ body {
 
 .girando { animation: rotarInfinito 1s linear infinite; pointer-events: none; }
 
-/* Ocultar scrollbars */
 .grid-familias-moderna, .selector-bancos, .tabla-responsive, .sidebar { scrollbar-width: none; -ms-overflow-style: none; }
 .grid-familias-moderna::-webkit-scrollbar, .selector-bancos::-webkit-scrollbar, .tabla-responsive::-webkit-scrollbar, .sidebar::-webkit-scrollbar { display: none; }
 
@@ -60,7 +59,6 @@ body[data-theme="dark"] {
     --border-color: #374151;    
 }
 
-/* Fondos Generales en Oscuro */
 body[data-theme="dark"] .card-grafico, 
 body[data-theme="dark"] .card-reporte-accion,
 body[data-theme="dark"] .stat-card,
@@ -78,12 +76,11 @@ body[data-theme="dark"] .modal-contenido-bonito {
     color: var(--texto-principal);
 }
 
-/* Inputs en modo oscuro */
 body[data-theme="dark"] input, 
 body[data-theme="dark"] select,
 body[data-theme="dark"] .grupo-filtro input[type="date"],
 body[data-theme="dark"] .grupo-filtro select {
-    background-color: #111827; /* Fondo bien oscuro para inputs */
+    background-color: #111827; 
     color: #ffffff;
     border: 1px solid #374151;
 }
@@ -95,7 +92,7 @@ body[data-theme="dark"] .grupo-filtro input[type="date"]:focus,
 body[data-theme="dark"] .grupo-filtro select:focus,
 body[data-theme="dark"] .input-hero:focus-within,
 body[data-theme="dark"] .input-operacion-wrapper input:focus {
-    background-color: #374151 !important; /* Gris oscuro elegante */
+    background-color: #374151 !important;
     color: #ffffff !important;
     border-color: var(--color-primario) !important;
 }
@@ -118,16 +115,14 @@ body[data-theme="dark"] .tabla-transacciones tbody tr:nth-child(even) {
 body[data-theme="dark"] .tabla-transacciones tbody tr:hover { 
     background-color: #374151; 
 }
-/* Color del texto en la tabla (incluyendo las letras oscuras) */
 body[data-theme="dark"] .tabla-transacciones td,
 body[data-theme="dark"] .col-tipo { 
     color: #f9fafb !important; 
     border-bottom-color: transparent;
 }
 
-/* 🟢 CORRECCIÓN: Botones de Boleta / Factura / Nota (Segmentos) */
 body[data-theme="dark"] .selector-tipo { 
-    background-color: #111827; /* Contenedor oscuro */
+    background-color: #111827; 
 }
 body[data-theme="dark"] .selector-tipo .segmento {
     color: #9ca3af;
@@ -142,7 +137,6 @@ body[data-theme="dark"] .selector-tipo .segmento.seleccionado {
     border: 2px solid var(--color-primario) !important;
 }
 
-/* Botón cerrar modales (X) y cancelar en modo oscuro */
 body[data-theme="dark"] .cerrar-modal, 
 body[data-theme="dark"] .btn-cancelar {
     background-color: #374151;
@@ -161,22 +155,18 @@ body[data-theme="dark"] .btn-hamburguesa {
     background: #1f2937; border: 1px solid #e5e7eb; cursor: pointer; 
 }
 
-
-
-/* 2. TEMA PINK (Para las chicas de caja) */
 body[data-theme="pink"] {
-    --color-fondo-app: #fdf2f8; /* Fondo rosado muy claro */
-    --color-primario: #db2777;  /* Fucsia/Pink fuerte */
+    --color-fondo-app: #fdf2f8; 
+    --color-primario: #db2777; 
     --color-secundario: #be185d;
-    --color-sidebar-bg: #831843; /* Sidebar guinda oscuro */
+    --color-sidebar-bg: #831843;
 }
 
-/* 3. TEMA ROJO (Estilo corporativo fuerte) */
 body[data-theme="red"] {
-    --color-fondo-app: #ebc2c2; /* Fondo rojo clarito */
-    --color-primario: #dc2626;  /* Rojo intenso */
+    --color-fondo-app: #ebc2c2; 
+    --color-primario: #dc2626;  
     --color-secundario: #991b1b;
-    --color-sidebar-bg: #6c1010; /* Sidebar rojo casi negro */
+    --color-sidebar-bg: #6c1010; 
 }
 
 /* ====================================================================
@@ -229,17 +219,20 @@ body[data-theme="dark"] .menu-temas {
 
 @media print {
     @page {
-        margin: 0 !important;
-        padding: 0.5rem !important;
+        size: 80mm auto;
+        margin: 0 !important; 
     }
 
-    body {
+   html, body {
         background-color: white !important;
         color: black !important;
         margin: 0 !important;
         padding: 0 !important;
+        height: auto !important;       
+        min-height: auto !important; 
+        overflow: visible !important; 
     }
-
+    /* Ocultamos toda la interfaz del sistema web */
     #sidebar, .header-sistema, .btn-abrir-caja, .botones-cierre,
     .ticket-visual-header, .grid-stats, .header-dashboard,
     .modal, .selector-tema-wrapper {
@@ -256,6 +249,8 @@ body[data-theme="dark"] .menu-temas {
         margin: 0 !important;
         padding: 0 !important;
         width: 100% !important;
+        height: auto !important;      
+        overflow: visible !important;  
         border: none !important;
         background: transparent !important;
         box-shadow: none !important;
@@ -263,15 +258,22 @@ body[data-theme="dark"] .menu-temas {
     }
 
     .ticket-paper {
-        width: 100% !important;     
-        max-width: 100% !important; 
-        margin: 0 !important;
-        margin-top: -12px !important; 
-        padding: 5px 6mm 10px 3mm !important;
+        width: 72mm !important;     
+        max-width: 72mm !important; 
+        height: auto !important;       
+        margin: 0 auto !important; 
+        padding: 0 4mm 10px 4mm !important; 
         box-sizing: border-box !important;   
         box-shadow: none !important; 
         border: none !important;
         background: white !important;
+        page-break-inside: avoid;     
+    }
+
+    .ticket-paper * {
+        max-width: 100% !important;
+        box-sizing: border-box !important;
+        word-wrap: break-word !important; 
     }
 
     .ticket-paper .ticket-header,
@@ -280,6 +282,31 @@ body[data-theme="dark"] .menu-temas {
         padding-top: 0 !important;
         line-height: 1 !important; 
     }
+
+    .logo-ticket {
+        width: 250px !important; 
+        height: auto !important;
+        margin: 0 auto 10px auto !important; 
+        display: block !important;
+        filter: grayscale(100%) contrast(1.5) brightness(1.2) !important; 
+    }
+
+    .ticket-paper table {
+        width: 100% !important;
+        max-width: 100% !important;
+        table-layout: fixed !important; 
+        border-collapse: collapse !important;
+    }
+
+    .ticket-paper th, 
+    .ticket-paper td {
+        word-wrap: break-word !important;
+        overflow-wrap: break-word !important;
+        white-space: normal !important; 
+        font-size: 11px !important; 
+        padding: 2px 1px !important;
+    }
+    
 }
 
 .logo-ticket {
