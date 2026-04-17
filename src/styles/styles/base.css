@@ -217,25 +217,45 @@ body[data-theme="dark"] .menu-temas {
 .color-dot.pink { background: #db2777; }
 .color-dot.red { background: #dc2626; }
 
+.logo-ticket {
+        width: 250px !important; 
+        height: auto !important;
+        margin: 0px auto 0PX !important; 
+        display: block !important;
+        filter: grayscale(100%) contrast(1.5) brightness(1.2) !important; 
+    }
+
 @media print {
     @page {
+        /* El valor 'auto' en la altura es fundamental para tickets largos */
         size: 80mm auto;
         margin: 0 !important; 
     }
 
-   html, body {
-        background-color: white !important;
-        color: black !important;
+    /* 1. RESET ESTRUCTURAL: Eliminamos Flexbox y fijamos altura automática */
+    html, body, 
+    .contenedor-derecho, 
+    .area-trabajo, 
+    #vista-cierre, 
+    .dashboard-cierre, 
+    .area-accion-final, 
+    .ticket-preview-wrapper {
+        display: block !important; /* Cambiar flex por block permite que crezca verticalmente */
+        height: auto !important; 
+        min-height: 0 !important;
+        overflow: visible !important; /* Vital para que no se oculte el contenido extra */
         margin: 0 !important;
         padding: 0 !important;
-        height: auto !important;       
-        min-height: auto !important; 
-        overflow: visible !important; 
+        background-color: white !important;
+        color: black !important;
+        position: static !important;
+        box-shadow: none !important;
     }
-    /* Ocultamos toda la interfaz del sistema web */
+
+    /* 2. OCULTAR INTERFAZ INNECESARIA */
     #sidebar, .header-sistema, .btn-abrir-caja, .botones-cierre,
     .ticket-visual-header, .grid-stats, .header-dashboard,
-    .modal, .selector-tema-wrapper {
+    .modal, .selector-tema-wrapper, .btn-tema {
         display: none !important;
     }
 
@@ -244,58 +264,48 @@ body[data-theme="dark"] .menu-temas {
         display: none !important;
     }
 
-    .contenedor-derecho, .area-trabajo, #vista-cierre, 
-    .dashboard-cierre, .area-accion-final, .ticket-preview-wrapper {
-        margin: 0 !important;
-        padding: 0 !important;
-        width: 100% !important;
-        height: auto !important;      
-        overflow: visible !important;  
-        border: none !important;
-        background: transparent !important;
-        box-shadow: none !important;
-        position: static !important;
-    }
-
+    /* 3. CONTENEDOR DEL TICKET (PAPEL) */
     .ticket-paper {
         width: 72mm !important;     
         max-width: 72mm !important; 
         height: auto !important;       
         margin: 0 auto !important; 
-        padding: 0 4mm 10px 4mm !important; 
+        padding: 0 2mm 5mm 2mm !important; /* Un poco de padding al final para evitar cortes */
         box-sizing: border-box !important;   
-        box-shadow: none !important; 
         border: none !important;
-        background: white !important;
-        page-break-inside: avoid;     
+        position: static !important;
+        overflow: visible !important;
+        display: block !important;
+        page-break-inside: auto !important; /* Permite que el ticket se extienda por varias páginas si es necesario */
     }
 
+    /* 4. EVITAR QUE LAS FILAS SE CORTEN A LA MITAD */
+    .ticket-paper tr {
+        page-break-inside: avoid !important;
+        page-break-after: auto !important;
+    }
+    
     .ticket-paper * {
         max-width: 100% !important;
         box-sizing: border-box !important;
         word-wrap: break-word !important; 
+        color: black !important;
     }
 
-    .ticket-paper .ticket-header,
-    .ticket-paper .ticket-header h3 {
-        margin-top: 0 !important;
-        padding-top: 0 !important;
-        line-height: 1 !important; 
-    }
-
+    /* 5. LOGO (Sin márgenes negativos para evitar desfases en el driver) */
     .logo-ticket {
-        width: 250px !important; 
+        width: 220px !important; 
         height: auto !important;
-        margin: 0 auto 10px auto !important; 
+        margin: 5px auto !important; /* Eliminado el -50px que causaba errores de cálculo */
         display: block !important;
-        filter: grayscale(100%) contrast(1.5) brightness(1.2) !important; 
+        filter: grayscale(100%) contrast(1.5) !important; 
     }
 
+    /* 6. TABLAS DE MOVIMIENTOS (Aquí irán los 50 movimientos) */
     .ticket-paper table {
         width: 100% !important;
-        max-width: 100% !important;
-        table-layout: fixed !important; 
         border-collapse: collapse !important;
+        table-layout: fixed !important; 
     }
 
     .ticket-paper th, 
@@ -303,16 +313,8 @@ body[data-theme="dark"] .menu-temas {
         word-wrap: break-word !important;
         overflow-wrap: break-word !important;
         white-space: normal !important; 
-        font-size: 11px !important; 
-        padding: 2px 1px !important;
+        font-size: 10px !important; /* Reducimos un poco para ganar espacio */
+        padding: 1px 0 !important;
+        border-bottom: 0.5pt solid #eee !important; /* Línea tenue entre movimientos */
     }
-    
 }
-
-.logo-ticket {
-        width: 250px !important; 
-        height: auto !important;
-        margin: -50px auto -40PX !important; 
-        display: block !important;
-        filter: grayscale(100%) contrast(1.5) brightness(1.2) !important; 
-    }

@@ -178,7 +178,7 @@ const Reportes = () => {
 
             // Crear HTML virtual para el PDF
             const container = document.createElement('div');
-            container.style.padding = '20px';
+            container.style.padding = '5px';
             container.style.fontFamily = 'Arial, sans-serif';
 
             const titulo = document.createElement('h2');
@@ -262,11 +262,12 @@ const Reportes = () => {
             container.appendChild(totalText);
 
             const opt = {
-                margin:       0.3,
+                margin:       [2, 2, 5, 2], // Márgenes [Arriba, Izquierda, Abajo, Derecha] en mm
                 filename:     `Reporte_${tipo}_${textoInicio}.pdf`,
                 image:        { type: 'jpeg', quality: 0.98 },
-                html2canvas:  { scale: 2 },
-                jsPDF:        { unit: 'in', format: 'a4', orientation: 'portrait' }
+                html2canvas:  { scale: 3, useCORS: true }, // scale: 3 mejora la nitidez del ticket
+                jsPDF:        { unit: 'mm', format: [80, 297], orientation: 'portrait' }, // Ancho 80mm
+                pagebreak:    { mode: ['avoid-all', 'css', 'legacy'] } // Evita cortes a la mitad de las filas
             };
 
             await html2pdf().set(opt).from(container).save();
