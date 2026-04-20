@@ -19,7 +19,7 @@ const Layout = () => {
     const cerrarMobile = () => setSidebarMobileOpen(false);
 
     return (
-        <div style={{ display: 'flex', height: '100vh', width: '100vw', overflow: 'hidden' }}>
+        <div className="layout-principal" style={{ display: 'flex', height: '100vh', width: '100vw', overflow: 'hidden' }}>
             
             <Sidebar 
                 colapsado={sidebarColapsado} 
