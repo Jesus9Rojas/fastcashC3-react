@@ -172,7 +172,6 @@ const VentaTarjeta = () => {
                                 const id = f.categoriaID || f.CategoriaID;
                                 const nombre = f.nombre || f.Nombre;
                                 const icono = MAPA_ICONOS_VENTAS[nombre] || '📦';
-                                const color = f.colorHex || f.ColorHex || '#2563eb'; // Azul por defecto para tarjeta
                                 const estaSeleccionada = familiaSeleccionada === id;
 
                                 return (
@@ -181,11 +180,6 @@ const VentaTarjeta = () => {
                                         type="button"
                                         className={`card-familia ${estaSeleccionada ? 'seleccionado' : ''}`}
                                         onClick={() => setFamiliaSeleccionada(id)}
-                                        style={{ 
-                                            backgroundColor: estaSeleccionada ? color : 'white',
-                                            color: estaSeleccionada ? 'white' : '#333',
-                                            borderColor: color
-                                        }}
                                     >
                                         <span className="emoji">{icono}</span>
                                         <span className="label">{nombre}</span>

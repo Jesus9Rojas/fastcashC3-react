@@ -152,7 +152,49 @@ body[data-theme="dark"] .turno-actual {
 }
 
 body[data-theme="dark"] .btn-hamburguesa {
-    background: #1f2937; border: 1px solid #e5e7eb; cursor: pointer; 
+    background: #111827; border: 1px solid #e5e7eb; cursor: pointer; 
+}
+
+body[data-theme="dark"] .admin-container {
+    background: #10151c; border-color: #374151; 
+}
+
+body[data-theme="dark"] .filtros-reporte-unificados{
+        background: #1f2937 !important; border-color: #374151 !important; color: white !important;
+}
+
+body[data-theme="dark"] .grupo-filtro label{
+ color: white !important;
+}
+
+body[data-theme="dark"] .card-reporte-accion{
+        background: #1f2937 !important; border-color: #374151 !important; color: white !important;
+}
+
+body[data-theme="dark"] .card-reporte-accion h3,
+body[data-theme="dark"] .card-reporte-accion p{
+ color: white !important;
+}
+
+body[data-theme="dark"] .card-grafico{
+        background: #1f2937 !important; border-color: #374151 !important; color: white !important;
+}
+
+body[data-theme="dark"] .card-grafico h3{
+ color: white !important;
+}
+
+body[data-theme="dark"] .header-dashboard{
+        background: #1f2937 !important; border-color: #374151 !important; color: white !important;
+}
+
+body[data-theme="dark"] .header-dashboard h2,
+body[data-theme="dark"] .header-dashboard p{
+ color: white !important;
+}
+
+body[data-theme="dark"] .card-accion{
+        background: #1f2937 !important; border-color: #374151 !important; color: white !important;
 }
 
 body[data-theme="pink"] {
@@ -163,10 +205,10 @@ body[data-theme="pink"] {
 }
 
 body[data-theme="red"] {
-    --color-fondo-app: #ebc2c2; 
+    --color-fondo-app: #eba9a9; 
     --color-primario: #dc2626;  
     --color-secundario: #991b1b;
-    --color-sidebar-bg: #6c1010; 
+    --color-sidebar-bg: #ac1c1c; 
 }
 
 /* ====================================================================

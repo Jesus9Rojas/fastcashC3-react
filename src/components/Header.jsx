@@ -4,15 +4,14 @@ import { AuthContext } from '../context/AuthContext';
 import api from '../services/api';
 import Swal from 'sweetalert2';
 
-// Iconos para tu selector de temas
+// 1. ÚNICA DECLARACIÓN DE ICONOS MODERNOS (Reemplaza a los emojis)
 const iconosTema = {
-    'light': '☀️',
-    'dark': '🌙',
-    'pink': '🌸',
-    'red': '🔥'
+    'light': <i className="fa-solid fa-sun" style={{ color: '#f59e0b' }}></i>,
+    'dark': <i className="fa-solid fa-moon" style={{ color: '#cbd5e1' }}></i>,
+    'pink': <i className="fa-solid fa-spa" style={{ color: '#ec4899' }}></i>,
+    'red': <i className="fa-solid fa-fire" style={{ color: '#ef4444' }}></i>
 };
 
-// Agregamos isMobileOpen a las propiedades que recibe el Header
 const Header = ({ toggleSidebar, isMobileOpen }) => {
     const { usuario, logout, cajaAbierta, setCajaAbierta } = useContext(AuthContext);
     const navigate = useNavigate();
@@ -24,11 +23,10 @@ const Header = ({ toggleSidebar, isMobileOpen }) => {
     const [horaActual, setHoraActual] = useState('');
     const [temaActual, setTemaActual] = useState(localStorage.getItem('temaFastCash') || 'light');
 
-    // 1. RELOJ EN TIEMPO REAL
+    // RELOJ EN TIEMPO REAL
     useEffect(() => {
         const actualizarReloj = () => {
             const ahora = new Date();
-            // Formato exacto que tenías: DD/MM/YYYY, 00:00 p.m.
             const texto = ahora.toLocaleString('es-PE', { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit', hour12: true });
             setHoraActual(texto);
         };
@@ -37,7 +35,7 @@ const Header = ({ toggleSidebar, isMobileOpen }) => {
         return () => clearInterval(intervalo);
     }, []);
 
-    // 2. APLICAR TEMA AL CARGAR LA PÁGINA
+    // APLICAR TEMA AL CARGAR LA PÁGINA
     useEffect(() => {
         document.body.setAttribute('data-theme', temaActual);
     }, [temaActual]);
@@ -59,7 +57,6 @@ const Header = ({ toggleSidebar, isMobileOpen }) => {
     }, [usuario, setCajaAbierta]);
 
     const handleAbrirCaja = async () => {
-        
         setAbriendo(true);
         try {
             const uid = usuario?.usuarioID || usuario?.UsuarioID;
@@ -71,7 +68,6 @@ const Header = ({ toggleSidebar, isMobileOpen }) => {
             
             setCajaAbierta(true);
             
-            // 2. Mostramos el mensaje de éxito que desaparece solo en 2 segundos
             Swal.fire({ 
                 title: '¡Turno Iniciado!', 
                 text: 'Caja Abierta Correctamente.', 
@@ -88,18 +84,16 @@ const Header = ({ toggleSidebar, isMobileOpen }) => {
         }
     };
 
-    // Función para cambiar tema y guardarlo en localStorage
-    const cambiarTema = (tema) => {
-        document.body.setAttribute('data-theme', tema);
-        setTemaActual(tema);
-        localStorage.setItem('temaFastCash', tema);
-        setMenuTemaActivo(false);
+    // 2. FUNCIÓN PARA CAMBIAR Y GUARDAR EL TEMA (Faltaba en tu código)
+    const cambiarTema = (nuevoTema) => {
+        setTemaActual(nuevoTema);
+        localStorage.setItem('temaFastCash', nuevoTema); // Guarda la preferencia del usuario
+        setMenuTemaActivo(false); // Cierra el menú al hacer clic
     };
 
     return (
         <header className="header-sistema">
             <div className="header-izquierda">
-                {/* BOTÓN HAMBURGUESA CONECTADO A LAYOUT Y CON CLASE ACTIVO DINÁMICA */}
                 <button 
                     className={`btn-hamburguesa ${isMobileOpen ? 'activo' : ''}`} 
                     onClick={toggleSidebar}
@@ -112,7 +106,7 @@ const Header = ({ toggleSidebar, isMobileOpen }) => {
                 {/* SELECTOR DE TEMAS */}
                 <div className="selector-tema-wrapper" style={{ position: 'relative' }}>
                     <button className="btn-tema" onClick={() => setMenuTemaActivo(!menuTemaActivo)} title="Cambiar Tema">
-                        <span id="iconoTemaActual">{iconosTema[temaActual] || '🎨'}</span>
+                        <span id="iconoTemaActual">{iconosTema[temaActual] || <i className="fa-solid fa-palette"></i>}</span>
                     </button>
                     {menuTemaActivo && (
                         <div className="menu-temas mostrar" style={{ display: 'block' }}>
@@ -126,7 +120,6 @@ const Header = ({ toggleSidebar, isMobileOpen }) => {
             </div>
 
             <div className="header-derecha">
-                {/* RELOJ EN VIVO */}
                 <div className="turno-info">
                     <span className="turno-actual fecha-hora-reloj">{horaActual}</span>
                 </div>

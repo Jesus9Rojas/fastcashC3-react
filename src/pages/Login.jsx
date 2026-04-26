@@ -4,7 +4,6 @@ import api from '../services/api';
 import '../styles/login.css';
 import logo from '../assets/img/img/LogoMas1.png'; 
 
-// --- Función de sanetización básica ---
 function sanitizarEntrada(texto) {
     if (!texto) return '';
     const elemento = document.createElement('div');
@@ -15,18 +14,15 @@ function sanitizarEntrada(texto) {
 const Login = () => {
     const { login } = useContext(AuthContext); 
     
-    // Estados del formulario
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [mostrarPass, setMostrarPass] = useState(false);
     const [chkRemember, setChkRemember] = useState(false);
     const [cargando, setCargando] = useState(false);
-    const [errorVisual, setErrorVisual] = useState(false); // Para el borde rojo
+    const [errorVisual, setErrorVisual] = useState(false); 
 
-    // Estado del Toast (Notificaciones)
     const [toast, setToast] = useState({ visible: false, mensaje: '', tipo: 'info' });
 
-    // --- 1. LÓGICA RECORDAR SESIÓN (AL CARGAR) ---
     useEffect(() => {
         const savedUser = localStorage.getItem('fastcash_saved_user');
         if (savedUser) {
@@ -35,13 +31,11 @@ const Login = () => {
         }
     }, []);
 
-    // Helper para mostrar notificaciones
     const mostrarToast = (mensaje, tipo = 'info') => {
         setToast({ visible: true, mensaje, tipo });
         setTimeout(() => setToast({ visible: false, mensaje: '', tipo: 'info' }), 3000);
     };
 
-    // --- LÓGICA LOGIN ---
     const handleLogin = async (e) => {
         e.preventDefault();
         
@@ -63,12 +57,11 @@ const Login = () => {
 
             const data = response.data;
 
-            // 🚀 LECTURA ROBUSTA: Soportamos camelCase y PascalCase
             const idLeido = data.usuarioID || data.UsuarioID;
             const nombreLeido = data.nombreCompleto || data.NombreCompleto;
             const rolLeido = data.rol || data.Rol;
             const userLeido = data.username || data.Username;
-            const tokenLeido = data.token || data.Token || 'token-temporal-hasta-implementar-jwt';
+            const tokenLeido = data.token || data.Token || 'token-temporal';
 
             if (!idLeido) {
                 throw new Error("El servidor no devolvió un ID de usuario válido.");
@@ -82,7 +75,6 @@ const Login = () => {
                 token: tokenLeido 
             };
 
-            // --- 2. LÓGICA RECORDAR SESIÓN (AL GUARDAR) ---
             if (chkRemember) {
                 localStorage.setItem('fastcash_saved_user', userSanitizado);
             } else {
@@ -91,9 +83,8 @@ const Login = () => {
 
             mostrarToast(`¡Bienvenido, ${sessionData.nombreCompleto}!`, 'success');
             
-            // Esperamos un segundo para que se vea el toast antes de entrar
             setTimeout(() => {
-                login(sessionData); // Esto actualiza el contexto y hace el cambio de pantalla
+                login(sessionData); 
             }, 1000);
 
         } catch (error) {
@@ -114,134 +105,142 @@ const Login = () => {
 
     return (
         <>
-            {/* --- COMPONENTE TOAST INTEGRADO --- */}
+            {/* TOAST DE NOTIFICACIONES */}
             {toast.visible && (
-                <div style={{
-                    position: 'fixed', top: '20px', right: '20px',
-                    background: toast.tipo === 'error' ? '#ef4444' : '#10b981',
-                    color: 'white', padding: '12px 24px', borderRadius: '8px',
-                    boxShadow: '0 4px 12px rgba(0,0,0,0.2)', fontWeight: '600',
-                    zIndex: 1000, display: 'flex', alignItems: 'center', gap: '10px',
-                    animation: 'slideIn 0.3s ease forwards'
-                }}>
+                <div className="toast-notificacion" style={{ background: toast.tipo === 'error' ? '#ef4444' : '#10b981' }}>
+                    <i className={`fas ${toast.tipo === 'error' ? 'fa-circle-xmark' : 'fa-circle-check'}`}></i>
                     {toast.mensaje}
                 </div>
             )}
-            <style>{`
-                @keyframes slideIn { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
-            `}</style>
             
-            {/* --- CONTENEDOR PRINCIPAL --- */}
-            <div className="contenedor-login" style={{ transition: 'all 0.5s ease', opacity: cargando ? 0.9 : 1 }}>
+            {/* CONTENEDOR PRINCIPAL CON IMAGEN DE FONDO */}
+            <div className="login-modern-layout">
                 
-                <div className="panel-izquierdo">
-                    <div className="overlay-gradiente"></div>
+                <div className="login-content-wrapper">
                     
-                    <div className="contenido-panel-izquierdo">
-                        <div className="branding">
+                    {/* PANEL IZQUIERDO: TEXTOS E INFORMACIÓN FLOTANTE */}
+                    <div className="login-info-panel">
+                        <div className="branding-modern">
                             <h1>Sistema de Gestión<br/><span>Comercial</span></h1>
                             <p>Control integral de ventas, inventarios y finanzas.</p>
                         </div>
 
-                        <div className="features-list">
-                            <div className="feature">
-                                <div className="icon-box"><i className="fas fa-shield-alt"></i></div>
-                                <div>
+                        <div className="features-modern">
+                            <div className="feature-item-modern">
+                                <div className="icon-glass-modern"><i className="fas fa-shield-alt"></i></div>
+                                <div className="feature-text">
                                     <h4>Seguridad Bancaria</h4>
-                                    <small>Encriptación de datos SSL</small>
+                                    <span>Encriptación de datos SSL</span>
                                 </div>
                             </div>
-                            <div className="feature">
-                                <div className="icon-box"><i className="fas fa-bolt"></i></div>
-                                <div>
+                            <div className="feature-item-modern">
+                                <div className="icon-glass-modern"><i className="fas fa-bolt"></i></div>
+                                <div className="feature-text">
                                     <h4>Tiempo Real</h4>
-                                    <small>Sincronización instantánea</small>
+                                    <span>Sincronización instantánea</span>
                                 </div>
                             </div>
-                            <div className="feature">
-                                <div className="icon-box"><i className="fas fa-chart-line"></i></div>
-                                <div>
+                            <div className="feature-item-modern">
+                                <div className="icon-glass-modern"><i className="fas fa-chart-line"></i></div>
+                                <div className="feature-text">
                                     <h4>Analítica Avanzada</h4>
-                                    <small>Reportes inteligentes</small>
+                                    <span>Reportes inteligentes</span>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </div>
 
-                <div className="panel-derecho">
-                    <div className="form-wrapper">
-                        
-                        <div className="header-form">
-                            <img src={logo} className="logo-login" alt="Logo Rojas Más" />
-                            <h2>Bienvenido</h2>
-                            <p>Ingresa tus credenciales para acceder</p>
-                        </div>
-
-                        <form onSubmit={handleLogin} autoComplete="off">
-                            <div className="input-group">
-                                <label htmlFor="username">Usuario</label>
-                                <div className="input-field">
-                                    <i className="fas fa-user input-icon"></i>
-                                    <input 
-                                        type="text" 
-                                        id="username" 
-                                        placeholder="Ej: admin" 
-                                        value={username}
-                                        onChange={(e) => setUsername(e.target.value)}
-                                        style={{ borderColor: errorVisual ? 'var(--color-primario)' : '' }}
-                                        required 
-                                    />
+                    {/* PANEL DERECHO: FORMULARIO GLASSMORPHISM */}
+                    <div className="login-form-panel">
+                        <div className="login-glass-card" style={{ opacity: cargando ? 0.8 : 1, transform: cargando ? 'scale(0.98)' : 'scale(1)' }}>
+                            
+                            <div className="login-header-modern">
+                                <div className="logo-container-modern">
+                                    <img src={logo} className="logo-login-modern" alt="Logo Rojas Más" />
                                 </div>
+                                <h2>Iniciar Sesión</h2>
+                                <p>Ingresa tus credenciales para acceder</p>
                             </div>
 
-                            <div className="input-group">
-                                <label htmlFor="password">Contraseña</label>
-                                <div className="input-field">
-                                    <i className="fas fa-lock input-icon"></i>
-                                    <input 
-                                        type={mostrarPass ? "text" : "password"} 
-                                        id="password" 
-                                        placeholder="••••••••" 
-                                        value={password}
-                                        onChange={(e) => setPassword(e.target.value)}
-                                        style={{ borderColor: errorVisual ? 'var(--color-primario)' : '' }}
-                                        required 
-                                    />
-                                    <i 
-                                        className={`far ${mostrarPass ? 'fa-eye-slash' : 'fa-eye'} toggle-pass`} 
-                                        title="Ver contraseña"
-                                        onClick={() => setMostrarPass(!mostrarPass)}
-                                    ></i>
+                            <form onSubmit={handleLogin} autoComplete="off" className="login-form-modern">
+                                
+                                <div className="input-group-modern">
+                                    <label htmlFor="username">Usuario</label>
+                                    <div className={`input-field-modern ${errorVisual ? 'error-shake' : ''}`}>
+                                        <i className="fas fa-user icon-modern"></i>
+                                        <input 
+                                            type="text" 
+                                            id="username" 
+                                            placeholder="Ej: admin" 
+                                            value={username}
+                                            onChange={(e) => setUsername(e.target.value)}
+                                            style={{ borderColor: errorVisual ? '#ef4444' : '' }}
+                                            required 
+                                        />
+                                    </div>
                                 </div>
+
+                                <div className="input-group-modern">
+                                    <label htmlFor="password">Contraseña</label>
+                                    <div className={`input-field-modern ${errorVisual ? 'error-shake' : ''}`}>
+                                        <i className="fas fa-lock icon-modern"></i>
+                                        <input 
+                                            type={mostrarPass ? "text" : "password"} 
+                                            id="password" 
+                                            placeholder="••••••••" 
+                                            value={password}
+                                            onChange={(e) => setPassword(e.target.value)}
+                                            style={{ borderColor: errorVisual ? '#ef4444' : '' }}
+                                            required 
+                                        />
+                                        <button 
+                                            type="button"
+                                            className="toggle-pass-modern"
+                                            onClick={() => setMostrarPass(!mostrarPass)}
+                                            title="Ver contraseña"
+                                        >
+                                            <i className={`far ${mostrarPass ? 'fa-eye-slash' : 'fa-eye'}`}></i>
+                                        </button>
+                                    </div>
+                                </div>
+                                
+                                <div className="options-row-modern">
+                                    <label className="remember-checkbox">
+                                        <input 
+                                            type="checkbox" 
+                                            checked={chkRemember}
+                                            onChange={(e) => setChkRemember(e.target.checked)}
+                                        />
+                                        <div className="checkbox-box">
+                                            <i className="fas fa-check"></i>
+                                        </div>
+                                        <span>Recordar mi usuario</span>
+                                    </label>
+                                </div>
+
+                                <button type="submit" className="btn-login-modern" disabled={cargando}>
+                                    {cargando ? (
+                                        <>
+                                            <i className="fas fa-spinner fa-spin"></i>
+                                            <span>Verificando...</span>
+                                        </>
+                                    ) : (
+                                        <>
+                                            <span>Ingresar al Sistema</span>
+                                            <i className="fas fa-arrow-right"></i>
+                                        </>
+                                    )}
+                                </button>
+                            </form>
+
+                            <div className="login-footer-modern">
+                                <p>© {new Date().getFullYear()} Rojas Más. Todos los derechos reservados.</p>
                             </div>
                             
-                            <div className="options-login">
-                                <label className="remember-me">
-                                    <input 
-                                        type="checkbox" 
-                                        checked={chkRemember}
-                                        onChange={(e) => setChkRemember(e.target.checked)}
-                                    />
-                                    <span className="checkmark"></span>
-                                    Recordar mi usuario
-                                </label>
-                            </div>
-
-                            <button type="submit" className="btn-login" disabled={cargando}>
-                                <span>{cargando ? 'Verificando...' : 'Ingresar al Sistema'}</span>
-                                {!cargando && <i className="fas fa-arrow-right"></i>}
-                                {cargando && <i className="fas fa-spinner fa-spin"></i>}
-                            </button>
-                        </form>
-
-                        <div className="footer-form">
-                            <p>© 2026 Rojas Más. Todos los derechos reservados.</p>
                         </div>
-                        
                     </div>
+
                 </div>
-                
             </div>
         </>
     );
